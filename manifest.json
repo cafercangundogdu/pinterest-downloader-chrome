@@ -1,10 +1,11 @@
 {
-  "manifest_version": 2,
-
+  "manifest_version": 3,
   "name": "Pinterest Image Downloader",
   "description": "Pinterest Image Downloader Chrome Extension.",
-  "browser_action": {
-    "default_icon": "icon.png",
+
+  "action": {
+    "default_icon": "images/icon-24.png",
+    "default_title": "Pinterest Image Downloader",
     "default_popup": "popup.html"
   },
   "permissions": [
