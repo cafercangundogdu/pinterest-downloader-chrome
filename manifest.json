@@ -1,19 +1,31 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Pinterest Image Downloader",
+  "version": "0.0.1",
   "description": "Pinterest Image Downloader Chrome Extension.",
-  "default_locale": "en",
-
-  "action": {
-    "default_icon": {
-      "24": "images/icon24.png",
-      "48": "images/icon48.png",
-      "96": "images/icon96.png"
-    },
-    "default_title": "Pinterest Image Downloader",
-    "default_popup": "popup.html"
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+  "icons": {
+    "48": "images/icon48.png"
+  },
+  "content_scripts": [ {
+    "matches": ["https://*.pinterest.com/*"],
+    "js": ["js/jquery.js", "js/content.js"]
+  }],
+  "web_accessible_resources": [
+    "js/inject-script.js",
+    "js/jquery.js"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "Pinterest Image Downloader"
   },
   "permissions": [
-    "activeTab"
+    "tabs",
+    "activeTab",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "downloads"
   ]
 }
