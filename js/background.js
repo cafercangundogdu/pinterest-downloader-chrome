@@ -34,16 +34,16 @@ const loadBoardResource = async username => {
   result = JSON.parse(result)
   let data = result.resource_response.data; // boards
 
-  console.log("resource_response", result.resource_response)
-
   let boards = []
   data.forEach(board => {
-    boards.push({
-      name: board.name,
-      id: board.id,
-      url: board.url,
-      pinCount: board.pin_count
-    })
+    if(board.id && board.name && board.url && board.url) {
+      boards.push({
+        name: board.name,
+        id: board.id,
+        url: board.url,
+        pinCount: board.pin_count
+      })
+    }
   })
 
   return boards
@@ -131,7 +131,6 @@ chrome.extension.onConnect.addListener(function(port) {
 
   port.onMessage.addListener(function(message) {
     if(message.type === "FROM_POPUP_load_boards") {
-      console.log("sended to content")
       const username = message.username
 
       // find boards....
@@ -150,7 +149,6 @@ chrome.extension.onConnect.addListener(function(port) {
       const boardId = message.boardId
       let feedCount = message.downloadCount || -1
       loadBoardFeedResourceRecursive(boardId, feedCount).then(board_feeds => {
-        console.log("background-  result - board-feed ", board_feeds)
         window.pindow.board_feeds = board_feeds || [];
 
         // download feeds...

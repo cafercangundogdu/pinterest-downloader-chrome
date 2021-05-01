@@ -23,12 +23,10 @@ let port = chrome.extension.connect({ name: "background-connection" });
 /******************/
 
 port.onMessage.addListener(function(message) {
-  log("message recieved" + message);
   if(message.type && message.type === "FROM_BG_result_boards") {
     const boards = message.boards
-    log("boards", boards)
     if(boards) {
-      $('#select-board').val('Please Select');
+      $('#select-board').empty().append(new Option('Please select a board..'));
       boards.forEach(board => {
         $('#select-board').append(new Option(`${board.name} (${board.pinCount} pin)`, board.id));
       })
@@ -40,14 +38,8 @@ port.onMessage.addListener(function(message) {
     port.postMessage({type: "FROM_POPUP_load_boards", username});
   } else if(message.type && message.type === "FROM_BG_result_download_board_feed_browser") {
     const boardFeeds = message.boardFeeds
-    if(boardFeeds && boardFeeds.length>0) {
-      console.log("Completed!")
-    } else {
-      console.log("Board is empty!")
-    }
   } else if(message.type && message.type === "progress_update") {
     const progress = message.progress
-    log(progress)
     if(!progress.active) {
       progressBarDiv.hide()
     } else {
@@ -62,17 +54,12 @@ port.onMessage.addListener(function(message) {
 });
 
 getBoardsButton.on('click', e => {
-  log("will load boards...")
   const username = usernameInput.val()
-  log("username: ", username)
-
   port.postMessage({type: "FROM_POPUP_load_boards", username});
 })
 
 downloadSelectedBoardButton.on('click', e => {
   const boardId = $('#select-board option:selected').val()
-  log("will download board => ", boardId)
-
   //port.postMessage({type: "FROM_POPUP_load_board_feeds", boardId});
   port.postMessage({type: "FROM_POPUP_download_board_feed_browser", boardId, downloadCount: -1});
 })
